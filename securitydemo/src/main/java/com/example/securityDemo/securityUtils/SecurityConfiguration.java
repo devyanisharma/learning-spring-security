@@ -2,6 +2,8 @@ package com.example.securityDemo.securityUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,47 +12,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+@Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserDetailsService userDetailsService;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //authentication method for JPA - mysql --user=devyani --host=localhost --password=passwor
         auth.userDetailsService(userDetailsService);
-
-        /*//authentication method  for jdbc through default schema
-        auth.jdbcAuthentication()
-                .dataSource(dataSource) //until this while using default schema
-                .usersByUsernameQuery("select username,password,enabled"
-                + " from users"
-                + " where username = ?")
-                .authoritiesByUsernameQuery("select username,authority"
-                + " from authorities"
-                + " where username = ?");*/
-
-         /*//ONLY FOR PRACTICE CAN NOT BE USED IN REAL WORLD
-                .withDefaultSchema()
-                .withUser(User.withUsername("user")
-                        .password("pass")
-                        .roles("USER"))
-                .withUser(User.withUsername("admin")
-                        .password("pass")
-                        .roles("ADMIN"));
-
-        //auth.inMemoryAuthentication()for H2
-        /* auth.inMemoryAuthentication()
-                .withUser("user")
-                .password("pass")
-                .roles("USER")
-                .and()
-                .withUser("admin")
-                .password("pass")
-                .roles("ADMIN");*/
     }
+
 
     @Bean
     public PasswordEncoder getpasswordEncoder() {
@@ -58,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     }
 
-    ;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

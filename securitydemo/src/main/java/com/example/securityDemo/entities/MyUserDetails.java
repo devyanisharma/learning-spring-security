@@ -1,22 +1,24 @@
 package com.example.securityDemo.entities;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.Entity;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class MyUserDetails implements UserDetails {
     private String userName;
-   private String password;
+    private String password;
    private boolean active;
    private List<GrantedAuthority> authorities;
-   private String roles;
 
-    public MyUserDetails(User user){
+    public MyUserDetails(Users user){
         this.userName = user.getUserName();
         this.password = user.getPassword();
         this.active = user.isActive();
@@ -24,8 +26,6 @@ public class MyUserDetails implements UserDetails {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-    }
-    public MyUserDetails(){
     }
 
     @Override
